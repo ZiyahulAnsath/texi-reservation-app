@@ -1,0 +1,25 @@
+'use client'
+import Map from 'react-map-gl';
+
+
+const MapBoxMap = () => {
+  return (
+    <div className="p-3 md:p-5">
+      <h2 className="text-[20px] font-semibold pb-2">Map</h2>
+     <div className=' rounded-lg overflow-hidden'> 
+     <Map
+      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
+      initialViewState={{
+        longitude: -122.4,
+        latitude: 37.8,
+        zoom: 14
+      }}
+      style={{width: '100%', height: 450, borderRadius:10}}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+    />
+     </div>
+    </div>
+  );
+};
+
+export default MapBoxMap;

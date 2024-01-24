@@ -1,8 +1,10 @@
+
 import type { Metadata } from "next";
 import { Inter, Raleway } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
+import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 // const re = Rel({ subsets: ['latin'] })
