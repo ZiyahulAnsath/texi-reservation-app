@@ -8,6 +8,7 @@ import { DestinationCordiContext } from "@/context/DestinationCordiContext";
 import { SourceCordiContext } from "@/context/SourceCordiContext";
 import { DirectionDataContext } from "@/context/DirectionDataContext";
 import MapBoxRoute from "./MapBoxRoute";
+import DistanceTime from "./DistanceTime";
 
 const MAPBOX_DRIVING_ENDPOINT =
   "https://api.mapbox.com/directions/v5/mapbox/driving/";
@@ -93,7 +94,7 @@ const MapBoxMap = () => {
               latitude: userLocation?.lat,
               zoom: 14,
             }}
-            style={{ width: "100%", height: 450, borderRadius: 10 }}
+            style={{ width: "100%", height: 550, borderRadius: 10 }}
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >
             <Markers />
@@ -105,6 +106,9 @@ const MapBoxMap = () => {
         ) : (
           <p>Loading map...</p>
         )}
+      </div>
+      <div className=" absolute bottom-[75px] z-20 right-[20px] hidden md:block">
+        <DistanceTime/>
       </div>
     </div>
   );
