@@ -1,11 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-
+import { DestinationCordiContext } from "@/context/DestinationCordiContext";
+import { SourceCordiContext } from "@/context/SourceCordiContext";
+import React, { useContext, useEffect, useState } from "react";
+const session_token = "0e42bfad-fe62-4d81-88d3-afcc1a300b9d";
+const MAPBOX_PRIVATE_URL =
+  "https://api.mapbox.com/search/searchbox/v1/retrieve/";
 const AutoCompleteAddress = () => {
   const [source, setSource] = useState<string>("");
   const [destination, setDestination] = useState<string>("");
   const [addressList, setAddressList] = useState<any>([]);
+  const {sourceCordinates, setSourceCordinates} = useContext(SourceCordiContext);
+  const {destinationCordinates, setDestinationCordinates} = useContext(DestinationCordiContext)
   const [sourceChange, setSourceChange] = useState<boolean>(false);
   const [destinationChange, setDestinationChange] = useState<boolean>(false);
 
@@ -25,12 +31,12 @@ const AutoCompleteAddress = () => {
         "Content-Type": "application/json",
       },
     });
-  
+
     if (!res.ok) {
       console.error("Error fetching data:", res.status, res.statusText);
       return;
     }
-  
+
     try {
       const result = await res.json();
       setAddressList(result);
@@ -38,7 +44,49 @@ const AutoCompleteAddress = () => {
       console.error("Error parsing JSON:", error);
     }
   };
-  
+
+  const onSourceAddressCLick = async (item: any) => {
+    setSource(item.full_address);
+    setAddressList([]);
+    setSourceChange(false);
+    const res = await fetch(
+      MAPBOX_PRIVATE_URL +
+        item.mapbox_id +
+        "?session_token=" +
+        session_token +
+        "&access_token=" +
+        process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+    );
+
+    const result = await res.json();
+    setSourceCordinates({
+      lng: result.features[0].geometry.coordinates[0],
+      lat: result.features[0].geometry.coordinates[1],
+    });
+    console.log(result);
+  };
+
+  const onDestinationAddressCLick = async (item: any) => {
+    setDestination(item.full_address);
+    setAddressList([]);
+    setDestinationChange(false);
+    const res = await fetch(
+      MAPBOX_PRIVATE_URL +
+        item.mapbox_id +
+        "?session_token=" +
+        session_token +
+        "&access_token=" +
+        process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+    );
+
+    const result = await res.json();
+    setDestinationCordinates({
+      lng: result.features[0].geometry.coordinates[0],
+      lat: result.features[0].geometry.coordinates[1],
+    });
+    console.log(result);
+  };
+
   return (
     <div>
       <div className="relative">
@@ -62,9 +110,7 @@ const AutoCompleteAddress = () => {
                 className="p-3 hover:bg-gray-200 cursor-pointer rounded-lg"
                 key={index}
                 onClick={() => {
-                  setSource(item.full_address);
-                  setAddressList([]);
-                  setSourceChange(false);
+                  onSourceAddressCLick(item);
                 }}
               >
                 {item.full_address}
@@ -94,9 +140,7 @@ const AutoCompleteAddress = () => {
                   className="p-3 hover:bg-gray-200 cursor-pointer rounded-lg"
                   key={index}
                   onClick={() => {
-                    setDestination(item.full_address);
-                    setAddressList([]);
-                    setDestinationChange(false);
+                    onDestinationAddressCLick(item);
                   }}
                 >
                   {item.full_address}

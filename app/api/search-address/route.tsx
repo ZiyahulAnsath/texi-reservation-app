@@ -10,7 +10,7 @@ export async function GET(request: any) {
     BASE_URL +
       '?q=' +
       searchText +
-      '&language=en&limit=8&session_token=093bd860-660b-47e1-88d2-ab0ec5903180&country=US' +
+      '&language=en&limit=8&session_token=0e42bfad-fe62-4d81-88d3-afcc1a300b9d&country=US' +
       '&access_token=' +
       process.env.MAPBOX_ACCESS_TOKEN,
     {
